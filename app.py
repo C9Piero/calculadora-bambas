@@ -177,10 +177,9 @@ st.markdown("""
         padding: 5px !important;
         border-radius: 12px !important;
         border: 1px solid #E1E8F0 !important;
-        border-bottom: 1px solid #E1E8F0 !important;
         width: fit-content;
     }
-    button[role="tab"] {
+    [role="tab"] {
         border-radius: 9px !important;
         padding: 8px 18px !important;
         color: #5B6B82 !important;
@@ -188,40 +187,33 @@ st.markdown("""
         background-color: transparent !important;
         border: none !important;
         box-shadow: none !important;
+        text-decoration: none !important;
     }
-    button[role="tab"] p,
-    button[role="tab"] div,
-    button[role="tab"] span {
+    [role="tab"] p,
+    [role="tab"] div,
+    [role="tab"] span {
         color: inherit !important;
         font-weight: 600 !important;
+        text-decoration: none !important;
     }
-    button[role="tab"][aria-selected="true"] {
+    [role="tab"][aria-selected="true"] {
         color: #1D4ED8 !important;
         background-color: #FFFFFF !important;
         box-shadow: 0 2px 8px -2px rgba(15, 42, 74, 0.15) !important;
-        text-decoration: none !important;
-    }
-    button[role="tab"] {
-        text-decoration: none !important;
-    }
-    /* Oculta cualquier div/span indicador anidado DENTRO del botón (no el texto en sí) */
-    button[role="tab"] > div > div {
-        text-decoration: none !important;
     }
     /* Elimina cualquier barra/línea de color (roja/negra) que indique la pestaña activa */
-    div[role="tablist"] > div,
     div[role="tablist"]::after,
-    button[role="tab"]::after,
-    button[role="tab"]::before {
+    [role="tab"]::after,
+    [role="tab"]::before {
         background-color: transparent !important;
         background: none !important;
         border-color: transparent !important;
         box-shadow: none !important;
         height: 0 !important;
+        content: none !important;
     }
-    /* Oculta por completo cualquier elemento indicador que no sea el propio botón de tab
-       (ej. la barra de subrayado nativa que aparecía cruzando el texto) */
-    div[role="tablist"] > *:not(button) {
+    /* Oculta el/los divs indicadores que son HERMANOS de los tabs (no los tabs en sí) */
+    div[role="tablist"] > div:not([role="tab"]) {
         display: none !important;
     }
 
