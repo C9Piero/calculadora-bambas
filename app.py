@@ -172,26 +172,40 @@ st.markdown("""
 
     /* Tabs estilo pill */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 4px;
-        background-color: #E9EFF8;
-        padding: 5px;
-        border-radius: 12px;
-        border: 1px solid #E1E8F0;
+        gap: 4px !important;
+        background-color: #E9EFF8 !important;
+        padding: 5px !important;
+        border-radius: 12px !important;
+        border: 1px solid #E1E8F0 !important;
     }
     .stTabs [data-baseweb="tab"] {
-        border-radius: 9px;
-        padding: 8px 18px;
-        color: #5B6B82;
-        font-weight: 600;
-        background-color: transparent;
+        border-radius: 9px !important;
+        padding: 8px 18px !important;
+        color: #5B6B82 !important;
+        font-weight: 600 !important;
+        background-color: transparent !important;
+    }
+    .stTabs [data-baseweb="tab"] p {
+        color: inherit !important;
+        font-weight: 600 !important;
     }
     .stTabs [aria-selected="true"] {
         color: #1D4ED8 !important;
         background-color: #FFFFFF !important;
-        box-shadow: 0 2px 8px -2px rgba(15, 42, 74, 0.15);
+        box-shadow: 0 2px 8px -2px rgba(15, 42, 74, 0.15) !important;
     }
-    .stTabs [data-baseweb="tab-highlight"] { background-color: transparent; }
-    .stTabs [data-baseweb="tab-border"] { display: none; }
+    /* Elimina la barra roja/negra nativa que indica la pestaña activa */
+    .stTabs [data-baseweb="tab-highlight"] {
+        background-color: transparent !important;
+        height: 0 !important;
+    }
+    .stTabs [data-baseweb="tab-border"] {
+        display: none !important;
+        background-color: transparent !important;
+    }
+    .stTabs [data-testid="stTabsTabListUnderline"] {
+        display: none !important;
+    }
 
     /* Dataframe */
     div[data-testid="stDataFrame"] {
