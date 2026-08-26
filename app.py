@@ -199,6 +199,14 @@ st.markdown("""
         color: #1D4ED8 !important;
         background-color: #FFFFFF !important;
         box-shadow: 0 2px 8px -2px rgba(15, 42, 74, 0.15) !important;
+        text-decoration: none !important;
+    }
+    button[role="tab"] {
+        text-decoration: none !important;
+    }
+    /* Oculta cualquier div/span indicador anidado DENTRO del botón (no el texto en sí) */
+    button[role="tab"] > div > div {
+        text-decoration: none !important;
     }
     /* Elimina cualquier barra/línea de color (roja/negra) que indique la pestaña activa */
     div[role="tablist"] > div,
@@ -210,6 +218,11 @@ st.markdown("""
         border-color: transparent !important;
         box-shadow: none !important;
         height: 0 !important;
+    }
+    /* Oculta por completo cualquier elemento indicador que no sea el propio botón de tab
+       (ej. la barra de subrayado nativa que aparecía cruzando el texto) */
+    div[role="tablist"] > *:not(button) {
+        display: none !important;
     }
 
     /* Dataframe */
