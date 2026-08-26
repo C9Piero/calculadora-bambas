@@ -170,41 +170,46 @@ st.markdown("""
         color: #FFFFFF;
     }
 
-    /* Tabs estilo pill */
-    .stTabs [data-baseweb="tab-list"] {
+    /* Tabs estilo pill (selectores ARIA, estables entre versiones de Streamlit) */
+    div[role="tablist"] {
         gap: 4px !important;
         background-color: #E9EFF8 !important;
         padding: 5px !important;
         border-radius: 12px !important;
         border: 1px solid #E1E8F0 !important;
+        border-bottom: 1px solid #E1E8F0 !important;
+        width: fit-content;
     }
-    .stTabs [data-baseweb="tab"] {
+    button[role="tab"] {
         border-radius: 9px !important;
         padding: 8px 18px !important;
         color: #5B6B82 !important;
         font-weight: 600 !important;
         background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
     }
-    .stTabs [data-baseweb="tab"] p {
+    button[role="tab"] p,
+    button[role="tab"] div,
+    button[role="tab"] span {
         color: inherit !important;
         font-weight: 600 !important;
     }
-    .stTabs [aria-selected="true"] {
+    button[role="tab"][aria-selected="true"] {
         color: #1D4ED8 !important;
         background-color: #FFFFFF !important;
         box-shadow: 0 2px 8px -2px rgba(15, 42, 74, 0.15) !important;
     }
-    /* Elimina la barra roja/negra nativa que indica la pestaña activa */
-    .stTabs [data-baseweb="tab-highlight"] {
+    /* Elimina cualquier barra/línea de color (roja/negra) que indique la pestaña activa */
+    div[role="tablist"] > div,
+    div[role="tablist"]::after,
+    button[role="tab"]::after,
+    button[role="tab"]::before {
         background-color: transparent !important;
+        background: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
         height: 0 !important;
-    }
-    .stTabs [data-baseweb="tab-border"] {
-        display: none !important;
-        background-color: transparent !important;
-    }
-    .stTabs [data-testid="stTabsTabListUnderline"] {
-        display: none !important;
     }
 
     /* Dataframe */
