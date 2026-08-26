@@ -9,51 +9,118 @@ st.set_page_config(page_title="Aliados de la Circularidad", page_icon="🌱", la
 # --- CSS: ESTILO MODERNO AZUL / NEUTRO ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-    
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
     /* Ocultar menú nativo */
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
-    
-    /* Fuente y fondo general */
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-    .stApp { background-color: #F4F7FB; }
 
-    /* Encabezado principal */
-    .app-title {
-        text-align: center;
-        color: #0F2A4A;
+    /* Fuente y fondo general con gradiente sutil */
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+    .stApp {
+        background: linear-gradient(180deg, #EEF3FB 0%, #F7F9FC 320px, #F7F9FC 100%);
+    }
+    .block-container {
+        padding-top: 1.5rem;
+        max-width: 760px;
+    }
+
+    /* ===== HERO ===== */
+    .hero-wrap {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        box-shadow: 0 10px 30px -10px rgba(15, 42, 74, 0.25);
+    }
+    .hero-wrap img {
+        display: block;
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        filter: saturate(1.05);
+    }
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(10,25,50,0.15) 0%, rgba(8,20,45,0.75) 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 22px 26px;
+    }
+    .hero-eyebrow {
+        display: inline-block;
+        align-self: flex-start;
+        background: rgba(255,255,255,0.16);
+        backdrop-filter: blur(6px);
+        color: #EAF1FF;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 5px 12px;
+        border-radius: 999px;
+        margin-bottom: 10px;
+        border: 1px solid rgba(255,255,255,0.25);
+    }
+    .hero-title {
+        color: #FFFFFF;
+        font-size: 1.7rem;
         font-weight: 800;
         letter-spacing: -0.5px;
-        margin-bottom: 4px;
+        margin: 0;
+        line-height: 1.2;
     }
-    .app-subtitle {
-        text-align: center;
-        color: #5B6B82;
-        font-size: 1.05rem;
+    .hero-subtitle {
+        color: #D7E4FA;
+        font-size: 0.95rem;
         font-weight: 500;
-        margin-bottom: 0;
+        margin-top: 4px;
     }
 
-    /* Imagen de portada con esquinas redondeadas */
-    div[data-testid="stImage"] img {
-        border-radius: 16px;
+    /* Divisor sutil en vez de línea dura */
+    hr {
+        border: none !important;
+        border-top: 1px solid #E3E9F2 !important;
+        margin: 1.6rem 0 !important;
     }
 
-    /* Contenedores con borde */
+    /* Contenedores con borde -> tarjetas flotantes */
     div[data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #FFFFFF;
-        border-radius: 14px !important;
-        border: 1px solid #E1E8F0 !important;
-        box-shadow: 0 4px 14px -4px rgba(15, 42, 74, 0.08);
-        padding: 18px;
+        border-radius: 16px !important;
+        border: 1px solid #EBEFF5 !important;
+        box-shadow: 0 6px 20px -8px rgba(15, 42, 74, 0.10);
+        padding: 20px;
+        transition: box-shadow 0.2s ease;
     }
 
-    /* Subtítulos dentro de tarjetas */
+    /* Subtítulos dentro de tarjetas, con acento lateral */
     h4 {
-        color: #1B3A5C !important;
+        color: #14304F !important;
         font-weight: 700 !important;
+        font-size: 1.05rem !important;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px !important;
+    }
+    h4::before {
+        content: "";
+        width: 4px;
+        height: 18px;
+        background: linear-gradient(180deg, #2563EB, #60A5FA);
+        border-radius: 3px;
+        display: inline-block;
+    }
+
+    /* Labels de inputs */
+    label p {
+        font-weight: 600 !important;
+        color: #3D4C63 !important;
+        font-size: 0.88rem !important;
     }
 
     /* Inputs y selects */
@@ -62,56 +129,69 @@ st.markdown("""
     .stNumberInput input,
     .stTextInput input {
         border-radius: 10px !important;
-        border: 1px solid #D3DEEA !important;
+        border: 1px solid #DCE4EF !important;
+        background-color: #FBFCFE !important;
     }
     div[data-baseweb="select"] > div:focus-within,
     .stTextInput input:focus,
     .stNumberInput input:focus {
         border-color: #2563EB !important;
-        box-shadow: 0 0 0 1px #2563EB33 !important;
+        box-shadow: 0 0 0 3px #2563EB1F !important;
+        background-color: #FFFFFF !important;
     }
 
     /* Botones generales */
     .stButton > button {
         border-radius: 10px;
-        border: 1px solid #D3DEEA;
+        border: 1px solid #DCE4EF;
         background-color: #FFFFFF;
         color: #1B3A5C;
         font-weight: 600;
-        transition: all 0.2s ease;
+        transition: all 0.15s ease;
     }
     .stButton > button:hover {
         border-color: #2563EB;
         color: #2563EB;
-        background-color: #EFF4FC;
+        background-color: #F0F5FE;
+        transform: translateY(-1px);
     }
 
     /* Botón primario (Registrar y Calcular) */
     .stButton > button[kind="primary"] {
-        background-color: #1D4ED8;
+        background: linear-gradient(135deg, #2563EB, #1D4ED8);
         border: none;
         color: #FFFFFF;
-        box-shadow: 0 4px 10px -2px rgba(29, 78, 216, 0.35);
+        box-shadow: 0 6px 16px -4px rgba(29, 78, 216, 0.45);
+        font-weight: 700;
     }
     .stButton > button[kind="primary"]:hover {
-        background-color: #1E40AF;
+        box-shadow: 0 8px 20px -4px rgba(29, 78, 216, 0.55);
+        transform: translateY(-1px);
         color: #FFFFFF;
     }
 
-    /* Tabs */
+    /* Tabs estilo pill */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 6px;
+        gap: 4px;
+        background-color: #E9EFF8;
+        padding: 5px;
+        border-radius: 12px;
+        border: 1px solid #E1E8F0;
     }
     .stTabs [data-baseweb="tab"] {
-        border-radius: 10px 10px 0 0;
+        border-radius: 9px;
         padding: 8px 18px;
         color: #5B6B82;
         font-weight: 600;
+        background-color: transparent;
     }
     .stTabs [aria-selected="true"] {
         color: #1D4ED8 !important;
-        border-bottom: 3px solid #1D4ED8 !important;
+        background-color: #FFFFFF !important;
+        box-shadow: 0 2px 8px -2px rgba(15, 42, 74, 0.15);
     }
+    .stTabs [data-baseweb="tab-highlight"] { background-color: transparent; }
+    .stTabs [data-baseweb="tab-border"] { display: none; }
 
     /* Dataframe */
     div[data-testid="stDataFrame"] {
@@ -123,34 +203,35 @@ st.markdown("""
     /* Métricas nativas */
     div[data-testid="stMetric"] {
         background-color: #FFFFFF;
-        border: 1px solid #E1E8F0;
-        border-radius: 12px;
-        padding: 12px 10px;
-        box-shadow: 0 2px 8px -3px rgba(15, 42, 74, 0.06);
+        border: 1px solid #EBEFF5;
+        border-radius: 14px;
+        padding: 14px 10px;
+        box-shadow: 0 4px 12px -4px rgba(15, 42, 74, 0.08);
     }
     div[data-testid="stMetricLabel"] { color: #5B6B82; }
-    div[data-testid="stMetricValue"] { color: #0F2A4A; }
+    div[data-testid="stMetricValue"] { color: #0F2A4A; font-weight: 800; }
 
     /* Cajas de info (st.info) */
     div[data-testid="stAlertContainer"] {
-        background-color: #EFF4FC;
+        background-color: #F0F5FE;
         border: 1px solid #D3E0F5;
         border-radius: 12px;
     }
 
     /* Tarjeta de Resultado */
     .resultado-card {
-        background-color: #FFFFFF;
-        border-left: 6px solid #1D4ED8;
-        border-radius: 10px;
-        box-shadow: 0 4px 14px -4px rgba(15, 42, 74, 0.1);
-        padding: 25px;
+        background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFF 100%);
+        border: 1px solid #E1E8F0;
+        border-top: 4px solid #2563EB;
+        border-radius: 16px;
+        box-shadow: 0 10px 24px -8px rgba(15, 42, 74, 0.15);
+        padding: 28px 25px;
         text-align: center;
         margin-top: 15px;
         margin-bottom: 15px;
     }
-    .metric-label { font-size: 1rem; color: #5B6B82; font-weight: 500; margin-bottom: 5px; }
-    .metric-big { font-size: 2.4rem; font-weight: 800; color: #0F2A4A; margin: 0; line-height: 1.1; }
+    .metric-label { font-size: 0.95rem; color: #5B6B82; font-weight: 500; margin-bottom: 6px; }
+    .metric-big { font-size: 2.6rem; font-weight: 800; color: #0F2A4A; margin: 0; line-height: 1.1; letter-spacing: -1px; }
     .metric-blue { color: #1D4ED8; }
     </style>
 """, unsafe_allow_html=True)
@@ -186,12 +267,19 @@ CATALOGO_MINA = {
 if "lista_prendas" not in st.session_state:
     st.session_state.lista_prendas = []
 
-# --- ENCABEZADO ---
-st.image("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1200&h=350", use_container_width=True)
+# --- ENCABEZADO (HERO) ---
+st.markdown("""
+    <div class="hero-wrap">
+        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1200&h=440" />
+        <div class="hero-overlay">
+            <span class="hero-eyebrow">Economía Circular</span>
+            <p class="hero-title">Aliados de la Circularidad</p>
+            <p class="hero-subtitle">Pequeños Detalles &amp; Mina Las Bambas</p>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 
-st.markdown("<h2 class='app-title'>Aliados de la Circularidad</h2>", unsafe_allow_html=True)
-st.markdown("<p class='app-subtitle'><b>Pequeños Detalles & Mina Las Bambas</b></p>", unsafe_allow_html=True)
-st.write("---")
+st.write("")
 
 # --- PESTAÑAS (TABS) ---
 tab1, tab2 = st.tabs(["Registro Comunitario", "Historial de Aportes"])
