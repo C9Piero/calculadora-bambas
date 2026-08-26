@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import random
+from supabase import create_client, Client
 
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(page_title="Aliados de la Circularidad", page_icon="🌱", layout="centered")
@@ -12,17 +13,26 @@ st.markdown("""
     header {visibility: hidden;}
     footer {visibility: hidden;}
     .resultado-card {
-        background-color: #ECFDF5;
-        border: 2px solid #10B981;
-        border-radius: 15px;
-        padding: 20px;
-        text-align: center;
-        margin-top: 20px;
+        background-color: #ECFDF5; border: 2px solid #10B981; border-radius: 15px;
+        padding: 20px; text-align: center; margin-top: 20px;
     }
     .metric-big { font-size: 2.5rem; font-weight: 800; color: #047857; margin: 0; }
     .metric-label { font-size: 1.1rem; color: #065F46; font-weight: 600; }
     </style>
 """, unsafe_allow_html=True)
+
+# --- CONEXIÓN A SUPABASE ---
+@st.cache_resource
+def init_supabase() -> Client:
+    url = st.secrets["supabase"]["SUPABASE_URL"]
+    key = st.secrets["supabase"]["SUPABASE_KEY"]
+    return create_client(url, key)
+
+try:
+    supabase = init_supabase()
+except Exception as e:
+    st.error(f"⚠️ No se pudo conectar con Supabase: {e}")
+    st.stop()
 
 # --- CATÁLOGO Y FACTORES DE CO2 (Por kg) ---
 CATALOGO_MINA = {
@@ -38,17 +48,14 @@ CATALOGO_MINA = {
     "🖐️ Guantes de Algodón": 0.5
 }
 
-# --- VARIABLES DE SESIÓN ---
+# --- VARIABLES DE SESIÓN (Bolsa temporal) ---
 if "lista_prendas" not in st.session_state:
     st.session_state.lista_prendas = []
-if "registro_historico" not in st.session_state:
-    st.session_state.registro_historico = []
 
 # --- ENCABEZADO ---
 st.image("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800&h=300", use_container_width=True)
 st.markdown("<h2 style='text-align: center; color: #1E293B;'>Aliados de la Circularidad</h2>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center; color: #64748B;'>Pequeños Detalles & Mina Las Bambas</h4>", unsafe_allow_html=True)
-
 st.write("---")
 
 # --- PESTAÑAS (TABS) ---
@@ -70,10 +77,7 @@ with tab1:
         
         if st.button("➕ Añadir a mi bolsa de reciclaje"):
             st.session_state.lista_prendas.append({
-                "Prenda": prenda_sel,
-                "Unidades": unidades,
-                "Peso (kg)": peso_kg,
-                "CO2_Factor": CATALOGO_MINA[prenda_sel]
+                "Prenda": prenda_sel, "Unidades": unidades, "Peso (kg)": peso_kg, "CO2_Factor": CATALOGO_MINA[prenda_sel]
             })
             st.success(f"Añadido: {unidades}x {prenda_sel} ({peso_kg} kg)")
 
@@ -92,18 +96,32 @@ with tab1:
             if not nombre:
                 st.warning("⚠️ Por favor, ingresa tu nombre en la parte superior.")
             else:
+                with st.spinner("Guardando registro en la nube..."):
+                    peso_total = sum(item["Peso (kg)"] for item in st.session_state.lista_prendas)
+                    unidades_total = sum(item["Unidades"] for item in st.session_state.lista_prendas)
+                    co2_total_evitado = sum(item["Peso (kg)"] * item["CO2_Factor"] for item in st.session_state.lista_prendas)
+                    
+                    eficiencia_upcycling = random.uniform(0.85, 0.92)
+                    material_recuperado = peso_total * eficiencia_upcycling
+                    
+                    arboles_salvados = max(1, int(co2_total_evitado / 22))
+                    agua_ahorrada = int(peso_total * 2500)
+
+                    # GUARDAR EN SUPABASE
+                    datos_bd = {
+                        "nombre": nombre,
+                        "comunidad": comunidad,
+                        "prendas_unid": int(unidades_total),
+                        "peso_kg": round(float(peso_total), 2),
+                        "material_recuperado_kg": round(float(material_recuperado), 2),
+                        "co2_evitado_kg": round(float(co2_total_evitado), 2)
+                    }
+                    try:
+                        supabase.table("registro_comunitario").insert(datos_bd).execute()
+                    except Exception as e:
+                        st.error(f"Error al guardar en Supabase: {e}")
+                
                 st.balloons()
-                
-                peso_total = sum(item["Peso (kg)"] for item in st.session_state.lista_prendas)
-                unidades_total = sum(item["Unidades"] for item in st.session_state.lista_prendas)
-                co2_total_evitado = sum(item["Peso (kg)"] * item["CO2_Factor"] for item in st.session_state.lista_prendas)
-                
-                eficiencia_upcycling = random.uniform(0.85, 0.92)
-                material_recuperado = peso_total * eficiencia_upcycling
-                
-                arboles_salvados = max(1, int(co2_total_evitado / 22))
-                agua_ahorrada = int(peso_total * 2500)
-                
                 st.markdown(f"""
                     <div class="resultado-card">
                         <p class="metric-label">¡Felicidades {nombre.split()[0]}! Has evitado la emisión de:</p>
@@ -119,43 +137,41 @@ with tab1:
                 with col_i2:
                     st.info(f"💧 **{agua_ahorrada:,} Litros**\n\nDe agua ahorrada al no fabricar textiles desde cero.")
                 
-                st.session_state.registro_historico.append({
-                    "Nombre": nombre,
-                    "Comunidad": comunidad,
-                    "Prendas (Unid)": unidades_total,
-                    "Peso (kg)": round(peso_total, 2),
-                    "Material Recuperado (kg)": round(material_recuperado, 2),
-                    "CO2 Evitado (kg)": round(co2_total_evitado, 2)
-                })
-                
                 st.session_state.lista_prendas = []
 
 with tab2:
-    st.markdown("### 📋 Registro de Participación")
-    st.caption("Historial de aportes de la comunidad realizados en este dispositivo.")
+    st.markdown("### 📋 Registro de Participación General")
+    st.caption("Historial de todos los aportes guardados en la nube.")
     
-    if st.session_state.registro_historico:
-        df_hist = pd.DataFrame(st.session_state.registro_historico)
-        st.dataframe(df_hist, use_container_width=True, hide_index=True)
+    # LEER DE SUPABASE
+    try:
+        res = supabase.table("registro_comunitario").select("*").order("created_at", desc=True).execute()
+        datos_supa = res.data
+    except Exception:
+        datos_supa = []
+        
+    if datos_supa:
+        df_hist = pd.DataFrame(datos_supa)
+        # Limpiar tabla visualmente para los usuarios
+        df_vista = df_hist[["created_at", "nombre", "comunidad", "prendas_unid", "peso_kg", "material_recuperado_kg", "co2_evitado_kg"]].copy()
+        df_vista["created_at"] = pd.to_datetime(df_vista["created_at"]).dt.strftime('%d/%m/%Y %H:%M')
+        df_vista.columns = ["Fecha", "Nombre", "Comunidad", "Unidades", "Peso (kg)", "Recuperado (kg)", "CO2 Evitado (kg)"]
+        
+        st.dataframe(df_vista, use_container_width=True, hide_index=True)
         
         c1, c2, c3 = st.columns(3)
         c1.metric("👥 Total Participantes", len(df_hist))
-        c2.metric("⚖️ Material Recuperado", f"{df_hist['Material Recuperado (kg)'].sum():.1f} kg")
-        c3.metric("🌍 CO2 Evitado", f"{df_hist['CO2 Evitado (kg)'].sum():.1f} kg")
+        c2.metric("⚖️ Material Recuperado", f"{df_hist['material_recuperado_kg'].sum():.1f} kg")
+        c3.metric("🌍 CO2 Evitado", f"{df_hist['co2_evitado_kg'].sum():.1f} kg")
         
         st.write("---")
-        st.markdown("#### 💾 Guardar Registro Local")
-        st.caption("⚠️ Al finalizar la jornada, descarga este Excel para no perder la información guardada en este celular/computadora.")
-        
-        # Convertir a CSV para el botón de descarga
-        csv = df_hist.to_csv(index=False).encode('utf-8')
-        
+        csv = df_vista.to_csv(index=False).encode('utf-8')
         st.download_button(
-            label="📥 Descargar Registro (Formato Excel/CSV)",
+            label="📥 Descargar Registro (Excel/CSV)",
             data=csv,
-            file_name="registro_comunidad_bambas.csv",
+            file_name="registro_las_bambas.csv",
             mime="text/csv",
             use_container_width=True
         )
     else:
-        st.info("Aún no hay registros. ¡Anímate a ser el primero en participar!")
+        st.info("Aún no hay registros en la base de datos.")
