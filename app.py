@@ -6,7 +6,7 @@ from supabase import create_client, Client
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(page_title="Aliados de la Circularidad", page_icon="🌱", layout="centered")
 
-# --- CSS: ESTILO MODERNO Y LIMPIO ---
+# --- CSS: ESTILO MODERNO AZUL / NEUTRO ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -18,31 +18,140 @@ st.markdown("""
     
     /* Fuente y fondo general */
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-    .stApp { background-color: #F8FAFC; }
-    
+    .stApp { background-color: #F4F7FB; }
+
+    /* Encabezado principal */
+    .app-title {
+        text-align: center;
+        color: #0F2A4A;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+    }
+    .app-subtitle {
+        text-align: center;
+        color: #5B6B82;
+        font-size: 1.05rem;
+        font-weight: 500;
+        margin-bottom: 0;
+    }
+
+    /* Imagen de portada con esquinas redondeadas */
+    div[data-testid="stImage"] img {
+        border-radius: 16px;
+    }
+
     /* Contenedores con borde */
     div[data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #FFFFFF;
-        border-radius: 12px !important;
-        border: 1px solid #E2E8F0 !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        padding: 15px;
+        border-radius: 14px !important;
+        border: 1px solid #E1E8F0 !important;
+        box-shadow: 0 4px 14px -4px rgba(15, 42, 74, 0.08);
+        padding: 18px;
+    }
+
+    /* Subtítulos dentro de tarjetas */
+    h4 {
+        color: #1B3A5C !important;
+        font-weight: 700 !important;
+    }
+
+    /* Inputs y selects */
+    div[data-baseweb="select"] > div,
+    div[data-baseweb="input"] > div,
+    .stNumberInput input,
+    .stTextInput input {
+        border-radius: 10px !important;
+        border: 1px solid #D3DEEA !important;
+    }
+    div[data-baseweb="select"] > div:focus-within,
+    .stTextInput input:focus,
+    .stNumberInput input:focus {
+        border-color: #2563EB !important;
+        box-shadow: 0 0 0 1px #2563EB33 !important;
+    }
+
+    /* Botones generales */
+    .stButton > button {
+        border-radius: 10px;
+        border: 1px solid #D3DEEA;
+        background-color: #FFFFFF;
+        color: #1B3A5C;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+    .stButton > button:hover {
+        border-color: #2563EB;
+        color: #2563EB;
+        background-color: #EFF4FC;
+    }
+
+    /* Botón primario (Registrar y Calcular) */
+    .stButton > button[kind="primary"] {
+        background-color: #1D4ED8;
+        border: none;
+        color: #FFFFFF;
+        box-shadow: 0 4px 10px -2px rgba(29, 78, 216, 0.35);
+    }
+    .stButton > button[kind="primary"]:hover {
+        background-color: #1E40AF;
+        color: #FFFFFF;
+    }
+
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 6px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 10px 10px 0 0;
+        padding: 8px 18px;
+        color: #5B6B82;
+        font-weight: 600;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #1D4ED8 !important;
+        border-bottom: 3px solid #1D4ED8 !important;
+    }
+
+    /* Dataframe */
+    div[data-testid="stDataFrame"] {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #E1E8F0;
+    }
+
+    /* Métricas nativas */
+    div[data-testid="stMetric"] {
+        background-color: #FFFFFF;
+        border: 1px solid #E1E8F0;
+        border-radius: 12px;
+        padding: 12px 10px;
+        box-shadow: 0 2px 8px -3px rgba(15, 42, 74, 0.06);
+    }
+    div[data-testid="stMetricLabel"] { color: #5B6B82; }
+    div[data-testid="stMetricValue"] { color: #0F2A4A; }
+
+    /* Cajas de info (st.info) */
+    div[data-testid="stAlertContainer"] {
+        background-color: #EFF4FC;
+        border: 1px solid #D3E0F5;
+        border-radius: 12px;
     }
 
     /* Tarjeta de Resultado */
     .resultado-card {
         background-color: #FFFFFF;
-        border-left: 6px solid #10B981;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border-left: 6px solid #1D4ED8;
+        border-radius: 10px;
+        box-shadow: 0 4px 14px -4px rgba(15, 42, 74, 0.1);
         padding: 25px;
         text-align: center;
         margin-top: 15px;
         margin-bottom: 15px;
     }
-    .metric-label { font-size: 1rem; color: #64748B; font-weight: 500; margin-bottom: 5px; }
-    .metric-big { font-size: 2.4rem; font-weight: 800; color: #0F172A; margin: 0; line-height: 1.1; }
-    .metric-green { color: #10B981; }
+    .metric-label { font-size: 1rem; color: #5B6B82; font-weight: 500; margin-bottom: 5px; }
+    .metric-big { font-size: 2.4rem; font-weight: 800; color: #0F2A4A; margin: 0; line-height: 1.1; }
+    .metric-blue { color: #1D4ED8; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -80,8 +189,8 @@ if "lista_prendas" not in st.session_state:
 # --- ENCABEZADO ---
 st.image("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1200&h=350", use_container_width=True)
 
-st.markdown("<h2 style='text-align: center; color: #0F172A; font-weight: 800;'>Aliados de la Circularidad</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #64748B; font-size: 1.1rem;'><b>Pequeños Detalles & Mina Las Bambas</b></p>", unsafe_allow_html=True)
+st.markdown("<h2 class='app-title'>Aliados de la Circularidad</h2>", unsafe_allow_html=True)
+st.markdown("<p class='app-subtitle'><b>Pequeños Detalles & Mina Las Bambas</b></p>", unsafe_allow_html=True)
 st.write("---")
 
 # --- PESTAÑAS (TABS) ---
@@ -89,14 +198,14 @@ tab1, tab2 = st.tabs(["Registro Comunitario", "Historial de Aportes"])
 
 with tab1:
     with st.container(border=True):
-        st.markdown("<h4 style='color: #1E293B;'>Datos del Participante</h4>", unsafe_allow_html=True)
+        st.markdown("<h4>Datos del Participante</h4>", unsafe_allow_html=True)
         nombre = st.text_input("¿Cuál es tu nombre completo?")
         comunidad = st.selectbox("¿A qué comunidad perteneces?", ["Comunidad A", "Comunidad B", "Comunidad C", "Otra"])
 
     st.write("")
     
     with st.container(border=True):
-        st.markdown("<h4 style='color: #1E293B;'>¿Qué prendas vamos a reciclar?</h4>", unsafe_allow_html=True)
+        st.markdown("<h4>¿Qué prendas vamos a reciclar?</h4>", unsafe_allow_html=True)
         prenda_sel = st.selectbox("Selecciona el tipo de Uniforme / EPP:", list(CATALOGO_MINA.keys()))
         col_u, col_p = st.columns(2)
         unidades = col_u.number_input("Unidades:", min_value=1, value=1, step=1)
@@ -111,7 +220,7 @@ with tab1:
     # Mostrar la bolsa
     if st.session_state.lista_prendas:
         st.write("")
-        st.markdown("<h4 style='color: #1E293B;'>Tu Bolsa Actual</h4>", unsafe_allow_html=True)
+        st.markdown("<h4>Tu Bolsa Actual</h4>", unsafe_allow_html=True)
         df_actual = pd.DataFrame(st.session_state.lista_prendas)
         st.dataframe(df_actual[["Prenda", "Unidades", "Peso (kg)"]], use_container_width=True, hide_index=True)
         
@@ -147,8 +256,8 @@ with tab1:
                 st.markdown(f"""
                     <div class="resultado-card">
                         <p class="metric-label">¡Gracias {nombre.split()[0]}! Has evitado la emisión de:</p>
-                        <p class="metric-big"><span class="metric-green">{co2_evitado:.1f} kg</span> de CO2</p>
-                        <p style="color: #64748B; margin-top: 15px; font-size: 0.95rem;">
+                        <p class="metric-big"><span class="metric-blue">{co2_evitado:.1f} kg</span> de CO2</p>
+                        <p style="color: #5B6B82; margin-top: 15px; font-size: 0.95rem;">
                             Logramos recuperar <b>{mat_recuperado:.2f} kg</b> de material útil para nuevos productos.
                         </p>
                     </div>
@@ -164,7 +273,7 @@ with tab1:
                 st.session_state.lista_prendas = []
 
 with tab2:
-    st.markdown("<h4 style='color: #1E293B;'>Registro General</h4>", unsafe_allow_html=True)
+    st.markdown("<h4>Registro General</h4>", unsafe_allow_html=True)
     
     # LEER DE SUPABASE
     try:
