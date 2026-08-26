@@ -39,10 +39,8 @@ CATALOGO_MINA = {
 }
 
 # --- VARIABLES DE SESIÓN ---
-# Para almacenar la lista de prendas que se van agregando
 if "lista_prendas" not in st.session_state:
     st.session_state.lista_prendas = []
-# Para el registro de quienes ya participaron
 if "registro_historico" not in st.session_state:
     st.session_state.registro_historico = []
 
@@ -64,7 +62,6 @@ with tab1:
     st.write("---")
     st.markdown("### ♻️ ¿Qué vamos a reciclar hoy?")
     
-    # Caja para ir agregando prendas
     with st.container(border=True):
         prenda_sel = st.selectbox("Selecciona el tipo de EPP / Uniforme:", list(CATALOGO_MINA.keys()))
         col_u, col_p = st.columns(2)
@@ -80,7 +77,6 @@ with tab1:
             })
             st.success(f"Añadido: {unidades}x {prenda_sel} ({peso_kg} kg)")
 
-    # Mostrar lo que se ha agregado hasta el momento
     if st.session_state.lista_prendas:
         st.write("")
         st.markdown("#### 📦 Tu bolsa actual:")
@@ -92,24 +88,21 @@ with tab1:
             st.session_state.lista_prendas = []
             st.rerun()
 
-        # Botón final de cálculo
         if col_calc.button("🌱 Registrar y Calcular Impacto", type="primary", use_container_width=True):
             if not nombre:
                 st.warning("⚠️ Por favor, ingresa tu nombre en la parte superior.")
             else:
                 st.balloons()
                 
-                # Cálculos matemáticos
                 peso_total = sum(item["Peso (kg)"] for item in st.session_state.lista_prendas)
                 unidades_total = sum(item["Unidades"] for item in st.session_state.lista_prendas)
                 co2_total_evitado = sum(item["Peso (kg)"] * item["CO2_Factor"] for item in st.session_state.lista_prendas)
                 
-                # Aprovechamiento aleatorio entre 85% y 92%
                 eficiencia_upcycling = random.uniform(0.85, 0.92)
                 material_recuperado = peso_total * eficiencia_upcycling
                 
                 arboles_salvados = max(1, int(co2_total_evitado / 22))
-                agua_ahorrada = int(peso_total * 2500) # Factor de tu código B2B
+                agua_ahorrada = int(peso_total * 2500)
                 
                 st.markdown(f"""
                     <div class="resultado-card">
@@ -126,7 +119,6 @@ with tab1:
                 with col_i2:
                     st.info(f"💧 **{agua_ahorrada:,} Litros**\n\nDe agua ahorrada al no fabricar textiles desde cero.")
                 
-                # Guardar transacción en la memoria de la segunda pestaña
                 st.session_state.registro_historico.append({
                     "Nombre": nombre,
                     "Comunidad": comunidad,
@@ -136,7 +128,6 @@ with tab1:
                     "CO2 Evitado (kg)": round(co2_total_evitado, 2)
                 })
                 
-                # Vaciar la bolsa para el siguiente usuario
                 st.session_state.lista_prendas = []
 
 with tab2:
@@ -151,5 +142,20 @@ with tab2:
         c1.metric("👥 Total Participantes", len(df_hist))
         c2.metric("⚖️ Material Recuperado", f"{df_hist['Material Recuperado (kg)'].sum():.1f} kg")
         c3.metric("🌍 CO2 Evitado", f"{df_hist['CO2 Evitado (kg)'].sum():.1f} kg")
+        
+        st.write("---")
+        st.markdown("#### 💾 Guardar Registro Local")
+        st.caption("⚠️ Al finalizar la jornada, descarga este Excel para no perder la información guardada en este celular/computadora.")
+        
+        # Convertir a CSV para el botón de descarga
+        csv = df_hist.to_csv(index=False).encode('utf-8')
+        
+        st.download_button(
+            label="📥 Descargar Registro (Formato Excel/CSV)",
+            data=csv,
+            file_name="registro_comunidad_bambas.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
     else:
         st.info("Aún no hay registros. ¡Anímate a ser el primero en participar!")
