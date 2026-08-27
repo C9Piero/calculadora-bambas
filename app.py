@@ -18,241 +18,86 @@ st.markdown("""
 
     /* Fuente y fondo general con gradiente sutil */
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-    .stApp {
-        background: linear-gradient(180deg, #EEF3FB 0%, #F7F9FC 320px, #F7F9FC 100%);
-    }
-    .block-container {
-        padding-top: 1.5rem;
-        max-width: 760px;
-    }
+    .stApp { background: linear-gradient(180deg, #EEF3FB 0%, #F7F9FC 320px, #F7F9FC 100%); }
+    .block-container { padding-top: 1.5rem; max-width: 760px; }
 
     /* ===== HERO ===== */
     .hero-wrap {
-        position: relative;
-        border-radius: 20px;
-        overflow: hidden;
-        margin-bottom: 8px;
+        position: relative; border-radius: 20px; overflow: hidden; margin-bottom: 8px;
         box-shadow: 0 10px 30px -10px rgba(15, 42, 74, 0.25);
     }
-    .hero-wrap img {
-        display: block;
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        filter: saturate(1.05);
-    }
+    .hero-wrap img { display: block; width: 100%; height: 220px; object-fit: cover; filter: saturate(1.05); }
     .hero-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(10,25,50,0.15) 0%, rgba(8,20,45,0.75) 100%);
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        padding: 22px 26px;
+        position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,25,50,0.15) 0%, rgba(8,20,45,0.75) 100%);
+        display: flex; flex-direction: column; justify-content: flex-end; padding: 22px 26px;
     }
     .hero-eyebrow {
-        display: inline-block;
-        align-self: flex-start;
-        background: rgba(255,255,255,0.16);
-        backdrop-filter: blur(6px);
-        color: #EAF1FF;
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        padding: 5px 12px;
-        border-radius: 999px;
-        margin-bottom: 10px;
-        border: 1px solid rgba(255,255,255,0.25);
+        display: inline-block; align-self: flex-start; background: rgba(255,255,255,0.16);
+        backdrop-filter: blur(6px); color: #EAF1FF; font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px;
+        margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.25);
     }
-    .hero-title {
-        color: #FFFFFF;
-        font-size: 1.7rem;
-        font-weight: 800;
-        letter-spacing: -0.5px;
-        margin: 0;
-        line-height: 1.2;
-    }
-    .hero-subtitle {
-        color: #D7E4FA;
-        font-size: 0.95rem;
-        font-weight: 500;
-        margin-top: 4px;
-    }
+    .hero-title { color: #FFFFFF; font-size: 1.7rem; font-weight: 800; letter-spacing: -0.5px; margin: 0; line-height: 1.2; }
+    .hero-subtitle { color: #D7E4FA; font-size: 0.95rem; font-weight: 500; margin-top: 4px; }
 
     /* Divisor sutil en vez de línea dura */
-    hr {
-        border: none !important;
-        border-top: 1px solid #E3E9F2 !important;
-        margin: 1.6rem 0 !important;
-    }
+    hr { border: none !important; border-top: 1px solid #E3E9F2 !important; margin: 1.6rem 0 !important; }
 
     /* Contenedores con borde -> tarjetas flotantes */
     div[data-testid="stVerticalBlockBorderWrapper"] {
-        background-color: #FFFFFF;
-        border-radius: 16px !important;
-        border: 1px solid #EBEFF5 !important;
-        box-shadow: 0 6px 20px -8px rgba(15, 42, 74, 0.10);
-        padding: 20px;
-        transition: box-shadow 0.2s ease;
+        background-color: #FFFFFF; border-radius: 16px !important; border: 1px solid #EBEFF5 !important;
+        box-shadow: 0 6px 20px -8px rgba(15, 42, 74, 0.10); padding: 20px; transition: box-shadow 0.2s ease;
     }
 
     /* Subtítulos dentro de tarjetas, con acento lateral */
-    h4 {
-        color: #14304F !important;
-        font-weight: 700 !important;
-        font-size: 1.05rem !important;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 14px !important;
-    }
-    h4::before {
-        content: "";
-        width: 4px;
-        height: 18px;
-        background: linear-gradient(180deg, #2563EB, #60A5FA);
-        border-radius: 3px;
-        display: inline-block;
-    }
+    h4 { color: #14304F !important; font-weight: 700 !important; font-size: 1.05rem !important; display: flex; align-items: center; gap: 8px; margin-bottom: 14px !important; }
+    h4::before { content: ""; width: 4px; height: 18px; background: linear-gradient(180deg, #2563EB, #60A5FA); border-radius: 3px; display: inline-block; }
 
     /* Labels de inputs */
-    label p {
-        font-weight: 600 !important;
-        color: #3D4C63 !important;
-        font-size: 0.88rem !important;
-    }
+    label p { font-weight: 600 !important; color: #3D4C63 !important; font-size: 0.88rem !important; }
 
     /* Inputs y selects */
-    div[data-baseweb="select"] > div,
-    div[data-baseweb="input"] > div,
-    .stNumberInput input,
-    .stTextInput input {
-        border-radius: 10px !important;
-        border: 1px solid #DCE4EF !important;
-        background-color: #FBFCFE !important;
+    div[data-baseweb="select"] > div, div[data-baseweb="input"] > div, .stNumberInput input, .stTextInput input {
+        border-radius: 10px !important; border: 1px solid #DCE4EF !important; background-color: #FBFCFE !important;
     }
-    div[data-baseweb="select"] > div:focus-within,
-    .stTextInput input:focus,
-    .stNumberInput input:focus {
-        border-color: #2563EB !important;
-        box-shadow: 0 0 0 3px #2563EB1F !important;
-        background-color: #FFFFFF !important;
+    div[data-baseweb="select"] > div:focus-within, .stTextInput input:focus, .stNumberInput input:focus {
+        border-color: #2563EB !important; box-shadow: 0 0 0 3px #2563EB1F !important; background-color: #FFFFFF !important;
     }
 
     /* Botones generales */
     .stButton > button {
-        border-radius: 10px;
-        border: 1px solid #DCE4EF;
-        background-color: #FFFFFF;
-        color: #1B3A5C;
-        font-weight: 600;
-        transition: all 0.15s ease;
+        border-radius: 10px; border: 1px solid #DCE4EF; background-color: #FFFFFF; color: #1B3A5C;
+        font-weight: 600; transition: all 0.15s ease;
     }
-    .stButton > button:hover {
-        border-color: #2563EB;
-        color: #2563EB;
-        background-color: #F0F5FE;
-        transform: translateY(-1px);
-    }
+    .stButton > button:hover { border-color: #2563EB; color: #2563EB; background-color: #F0F5FE; transform: translateY(-1px); }
 
     /* Botón primario (Registrar y Calcular) */
     .stButton > button[kind="primary"] {
-        background: linear-gradient(135deg, #2563EB, #1D4ED8);
-        border: none;
-        color: #FFFFFF;
-        box-shadow: 0 6px 16px -4px rgba(29, 78, 216, 0.45);
-        font-weight: 700;
+        background: linear-gradient(135deg, #2563EB, #1D4ED8); border: none; color: #FFFFFF;
+        box-shadow: 0 6px 16px -4px rgba(29, 78, 216, 0.45); font-weight: 700;
     }
-    .stButton > button[kind="primary"]:hover {
-        box-shadow: 0 8px 20px -4px rgba(29, 78, 216, 0.55);
-        transform: translateY(-1px);
-        color: #FFFFFF;
-    }
+    .stButton > button[kind="primary"]:hover { box-shadow: 0 8px 20px -4px rgba(29, 78, 216, 0.55); transform: translateY(-1px); color: #FFFFFF; }
 
-    /* Tabs estilo pill (selectores ARIA, estables entre versiones de Streamlit) */
-    div[role="tablist"] {
-        gap: 4px !important;
-        background-color: #E9EFF8 !important;
-        padding: 5px !important;
-        border-radius: 12px !important;
-        border: 1px solid #E1E8F0 !important;
-        width: fit-content;
-    }
-    [role="tab"] {
-        border-radius: 9px !important;
-        padding: 8px 18px !important;
-        color: #5B6B82 !important;
-        font-weight: 600 !important;
-        background-color: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        text-decoration: none !important;
-    }
-    [role="tab"] p,
-    [role="tab"] div,
-    [role="tab"] span {
-        color: inherit !important;
-        font-weight: 600 !important;
-        text-decoration: none !important;
-    }
-    [role="tab"][aria-selected="true"] {
-        color: #1D4ED8 !important;
-        background-color: #FFFFFF !important;
-        box-shadow: 0 2px 8px -2px rgba(15, 42, 74, 0.15) !important;
-    }
-    /* Elimina cualquier barra/línea de color (roja/negra) que indique la pestaña activa */
-    div[role="tablist"]::after,
-    [role="tab"]::after,
-    [role="tab"]::before {
-        background-color: transparent !important;
-        background: none !important;
-        border-color: transparent !important;
-        box-shadow: none !important;
-        height: 0 !important;
-        content: none !important;
-    }
-    /* Oculta el/los divs indicadores que son HERMANOS de los tabs (no los tabs en sí) */
-    div[role="tablist"] > div:not([role="tab"]) {
-        display: none !important;
-    }
+    /* Tabs estilo pill */
+    div[role="tablist"] { gap: 4px !important; background-color: #E9EFF8 !important; padding: 5px !important; border-radius: 12px !important; border: 1px solid #E1E8F0 !important; width: fit-content; }
+    [role="tab"] { border-radius: 9px !important; padding: 8px 18px !important; color: #5B6B82 !important; font-weight: 600 !important; background-color: transparent !important; border: none !important; box-shadow: none !important; text-decoration: none !important; }
+    [role="tab"] p, [role="tab"] div, [role="tab"] span { color: inherit !important; font-weight: 600 !important; text-decoration: none !important; }
+    [role="tab"][aria-selected="true"] { color: #1D4ED8 !important; background-color: #FFFFFF !important; box-shadow: 0 2px 8px -2px rgba(15, 42, 74, 0.15) !important; }
+    div[role="tablist"]::after, [role="tab"]::after, [role="tab"]::before { background-color: transparent !important; background: none !important; border-color: transparent !important; box-shadow: none !important; height: 0 !important; content: none !important; }
+    div[role="tablist"] > div:not([role="tab"]) { display: none !important; }
 
-    /* Dataframe */
-    div[data-testid="stDataFrame"] {
-        border-radius: 12px;
-        overflow: hidden;
-        border: 1px solid #E1E8F0;
-    }
-
-    /* Métricas nativas */
-    div[data-testid="stMetric"] {
-        background-color: #FFFFFF;
-        border: 1px solid #EBEFF5;
-        border-radius: 14px;
-        padding: 14px 10px;
-        box-shadow: 0 4px 12px -4px rgba(15, 42, 74, 0.08);
-    }
+    /* Dataframe y Métricas nativas */
+    div[data-testid="stDataFrame"] { border-radius: 12px; overflow: hidden; border: 1px solid #E1E8F0; }
+    div[data-testid="stMetric"] { background-color: #FFFFFF; border: 1px solid #EBEFF5; border-radius: 14px; padding: 14px 10px; box-shadow: 0 4px 12px -4px rgba(15, 42, 74, 0.08); }
     div[data-testid="stMetricLabel"] { color: #5B6B82; }
     div[data-testid="stMetricValue"] { color: #0F2A4A; font-weight: 800; }
-
-    /* Cajas de info (st.info) */
-    div[data-testid="stAlertContainer"] {
-        background-color: #F0F5FE;
-        border: 1px solid #D3E0F5;
-        border-radius: 12px;
-    }
+    div[data-testid="stAlertContainer"] { background-color: #F0F5FE; border: 1px solid #D3E0F5; border-radius: 12px; }
 
     /* Tarjeta de Resultado */
     .resultado-card {
-        background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFF 100%);
-        border: 1px solid #E1E8F0;
-        border-top: 4px solid #2563EB;
-        border-radius: 16px;
-        box-shadow: 0 10px 24px -8px rgba(15, 42, 74, 0.15);
-        padding: 28px 25px;
-        text-align: center;
-        margin-top: 15px;
-        margin-bottom: 15px;
+        background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFF 100%); border: 1px solid #E1E8F0;
+        border-top: 4px solid #2563EB; border-radius: 16px; box-shadow: 0 10px 24px -8px rgba(15, 42, 74, 0.15);
+        padding: 28px 25px; text-align: center; margin-top: 15px; margin-bottom: 15px;
     }
     .metric-label { font-size: 0.95rem; color: #5B6B82; font-weight: 500; margin-bottom: 6px; }
     .metric-big { font-size: 2.6rem; font-weight: 800; color: #0F2A4A; margin: 0; line-height: 1.1; letter-spacing: -1px; }
@@ -273,7 +118,7 @@ except Exception as e:
     st.error(f"Error de conexión con Supabase: {e}")
     st.stop()
 
-# --- CATÁLOGO DE LAS BAMBAS (SIN EMOJIS) ---
+# --- CATÁLOGO DE LAS BAMBAS ---
 CATALOGO_MINA = {
     "Camisa o Blusa de Trabajo (UV)": 5.0,
     "Chaleco de Seguridad (Alta Visibilidad)": 4.5,
@@ -286,6 +131,20 @@ CATALOGO_MINA = {
     "Correas y Cintas de Poliéster (Arneses)": 2.0,
     "Guantes de Algodón": 0.5
 }
+
+# --- CARGAR COMUNIDADES DESDE SUPABASE ---
+def cargar_comunidades():
+    try:
+        res = supabase.table("catalogos").select("nombre").eq("tipo", "comunidades_bambas").execute()
+        if res.data:
+            return sorted([item["nombre"] for item in res.data])
+    except Exception:
+        pass
+    return ["Comunidad Base A", "Comunidad Base B"] # Valores por defecto si la base está vacía
+
+opciones_comunidades = cargar_comunidades()
+if "Otra / No especificada" not in opciones_comunidades:
+    opciones_comunidades.append("Otra / No especificada")
 
 # --- VARIABLES DE SESIÓN ---
 if "lista_prendas" not in st.session_state:
@@ -312,7 +171,7 @@ with tab1:
     with st.container(border=True):
         st.markdown("<h4>Datos del Participante</h4>", unsafe_allow_html=True)
         nombre = st.text_input("¿Cuál es tu nombre completo?")
-        comunidad = st.selectbox("¿A qué comunidad perteneces?", ["Comunidad A", "Comunidad B", "Comunidad C", "Otra"])
+        comunidad = st.selectbox("¿A qué comunidad perteneces?", opciones_comunidades)
 
     st.write("")
     
@@ -383,6 +242,42 @@ with tab1:
                     st.info(f"**{agua:,} Litros**\n\nDe agua ahorrada al no fabricar textiles nuevos.")
                 
                 st.session_state.lista_prendas = []
+
+    # --- PANEL ADMINISTRATIVO OCULTO ---
+    st.write("---")
+    with st.expander("⚙️ Administrar Comunidades (Solo Coordinadores)"):
+        st.markdown("<p style='font-size: 0.85rem; color: #5B6B82;'>Ingresa la contraseña para agregar o eliminar comunidades de la lista.</p>", unsafe_allow_html=True)
+        pwd_input = st.text_input("Contraseña:", type="password", key="admin_pwd")
+        
+        # Contraseña configurada por defecto
+        if pwd_input == "Bambas2026":
+            st.success("Acceso autorizado")
+            
+            c_add, c_del = st.columns(2)
+            with c_add:
+                nueva_comunidad = st.text_input("Nueva comunidad:")
+                if st.button("➕ Agregar"):
+                    if nueva_comunidad.strip():
+                        try:
+                            supabase.table("catalogos").insert({"tipo": "comunidades_bambas", "nombre": nueva_comunidad.strip(), "valor_num": 0}).execute()
+                            st.toast("✅ Comunidad agregada a la nube")
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"Error: {e}")
+                            
+            with c_del:
+                comunidades_borrables = [c for c in opciones_comunidades if "Otra" not in c]
+                comunidad_borrar = st.selectbox("Comunidad a eliminar:", comunidades_borrables)
+                if st.button("🗑️ Eliminar"):
+                    if comunidad_borrar:
+                        try:
+                            supabase.table("catalogos").delete().eq("tipo", "comunidades_bambas").eq("nombre", comunidad_borrar).execute()
+                            st.toast("🗑️ Comunidad eliminada")
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"Error: {e}")
+        elif pwd_input != "":
+            st.error("❌ Contraseña incorrecta")
 
 with tab2:
     st.markdown("<h4>Registro General</h4>", unsafe_allow_html=True)
