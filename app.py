@@ -118,7 +118,7 @@ except Exception as e:
     st.error(f"Error de conexión con Supabase: {e}")
     st.stop()
 
-# --- CATÁLOGO DE LAS BAMBAS ---
+# --- CATÁLOGO DE LAS BAMBAS (SIN EMOJIS) ---
 CATALOGO_MINA = {
     "Camisa o Blusa de Trabajo (UV)": 5.0,
     "Chaleco de Seguridad (Alta Visibilidad)": 4.5,
@@ -140,7 +140,7 @@ def cargar_comunidades():
             return sorted([item["nombre"] for item in res.data])
     except Exception:
         pass
-    return ["Comunidad Base A", "Comunidad Base B"] # Valores por defecto si la base está vacía
+    return ["Comunidad Base A", "Comunidad Base B"] # Valores por defecto
 
 opciones_comunidades = cargar_comunidades()
 if "Otra / No especificada" not in opciones_comunidades:
@@ -223,7 +223,7 @@ with tab1:
                     except Exception as e:
                         st.error(f"Error de conexión: {e}")
                 
-                # TARJETA DE RESULTADO LIMPIA Y ELEGANTE
+                # TARJETA DE RESULTADO
                 st.markdown(f"""
                     <div class="resultado-card">
                         <p class="metric-label">¡Gracias {nombre.split()[0]}! Has evitado la emisión de:</p>
@@ -284,24 +284,46 @@ with tab2:
     
     # LEER DE SUPABASE
     try:
-        res = supabase.table("registro_comunitario").select("*").order("created_at", desc=True).execute()
+        # Quitamos cualquier dependencia de created_at para evitar errores si no existe en la base de datos
+        res = supabase.table("registro_comunitario").select("*").execute()
         datos_supa = res.data
-    except Exception:
+    except Exception as e:
+        st.error(f"Error de lectura: {e}")
         datos_supa = []
         
     if datos_supa:
         df_hist = pd.DataFrame(datos_supa)
         
-        # MÉTRICAS ESTILO NATIVO DE STREAMLIT
+        # MÉTRICAS ESTILO NATIVO
         c1, c2, c3 = st.columns(3)
         c1.metric("Participantes", f"{len(df_hist)}")
-        c2.metric("Prendas", f"{df_hist['prendas_unid'].sum()}")
-        c3.metric("CO2 Evitado", f"{df_hist['co2_evitado_kg'].sum():.1f} kg")
+        
+        # Uso de .get() por seguridad en caso de que alguna columna falte temporalmente
+        prendas_totales = df_hist.get("prendas_unid", pd.Series([0])).sum()
+        co2_total = df_hist.get("co2_evitado_kg", pd.Series([0])).sum()
+        
+        c2.metric("Prendas", f"{prendas_totales}")
+        c3.metric("CO2 Evitado", f"{co2_total:.1f} kg")
         
         st.write("---")
-        df_vista = df_hist[["created_at", "nombre", "comunidad", "prendas_unid", "material_recuperado_kg", "co2_evitado_kg"]].copy()
-        df_vista["created_at"] = pd.to_datetime(df_vista["created_at"]).dt.strftime('%d/%m/%y')
-        df_vista.columns = ["Fecha", "Nombre", "Comunidad", "Unid.", "Recuperado (kg)", "CO2 (kg)"]
+        
+        # Limpieza de tabla para mostrar al usuario final
+        df_vista = df_hist.copy()
+        
+        # Excluir id si es que se ha creado en la base de datos para no confundir al usuario
+        if "id" in df_vista.columns:
+            df_vista = df_vista.drop(columns=["id"])
+            
+        renombres = {
+            "created_at": "Fecha/Hora",
+            "nombre": "Nombre",
+            "comunidad": "Comunidad",
+            "prendas_unid": "Unid.",
+            "peso_kg": "Peso (kg)",
+            "material_recuperado_kg": "Recuperado (kg)",
+            "co2_evitado_kg": "CO2 (kg)"
+        }
+        df_vista = df_vista.rename(columns={k: v for k, v in renombres.items() if k in df_vista.columns})
         
         st.dataframe(df_vista, use_container_width=True, hide_index=True)
         
